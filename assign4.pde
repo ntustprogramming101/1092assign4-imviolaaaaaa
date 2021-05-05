@@ -67,15 +67,7 @@ void setup() {
 	soldier = loadImage("img/soldier.png");
 	cabbage = loadImage("img/cabbage.png");
 
-	soilEmpty = loadImage("img/soils/soilEmpty.png");
 
-	// Load soil images used in assign3 if you don't plan to finish requirement #6
-	//soil0 = loadImage("img/soil0.png");
-	//soil1 = loadImage("img/soil1.png");
-	//soil2 = loadImage("img/soil2.png");
-	//soil3 = loadImage("img/soil3.png");
-	//soil4 = loadImage("img/soil4.png");
-	//soil5 = loadImage("img/soil5.png");
 
 	// Load PImage[][] soils
 	soils = new PImage[6][5];
@@ -84,6 +76,9 @@ void setup() {
 			soils[i][j] = loadImage("img/soils/soil" + i + "/soil" + i + "_" + j + ".png");
 		}
 	}
+
+  // load empty soil
+  soilEmpty = loadImage("img/soils/soilEmpty.png");
 
 	// Load PImage[][] stones
 	stones = new PImage[2][5];
@@ -108,8 +103,7 @@ void setup() {
 	
   for(int i = 0; i < soilHealth.length; i++){
 		for (int j = 0; j < soilHealth[i].length; j++) {
-			 
-       // 0: no soil, 15: soil only, 30: 1 stone, 45: 2 stones
+  
        int areaIndex = floor(j / 4);
        /*
        0th area(floor1-4): j=0~3
@@ -119,6 +113,8 @@ void setup() {
        4th area(floor17-20): j=16~19
        5th area(floor21-24): j=20~23
        */
+       
+       // 0: no soil, 15: soil only, 30: 1 stone, 45: 2 stones
        
        //original
        soilHealth[i][j] = 15; 
@@ -233,8 +229,8 @@ void draw() {
 	    fill(253,184,19);
 	    ellipse(590,50,120,120);
 
-	    // CAREFUL!
-	    // Because of how this translate value is calculated, the Y value of the ground level is actually 0
+	  // CAREFUL!
+	  // Because of how this translate value is calculated, the Y value of the ground level is actually 0
 		pushMatrix();
 		translate(0, max(SOIL_SIZE * -18, SOIL_SIZE * 1 - playerY));
 
@@ -248,34 +244,30 @@ void draw() {
 			for (int j = 0; j < soilHealth[i].length; j++) {
 
 			  // NOTE: To avoid errors on webpage, you can either use floor(j / 4) or (int)(j / 4) to make sure it's an integer.
-			  //int areaIndex = floor(j / 4); 
+			  int areaIndex = floor(j / 4); 
+        int s = soilHealth[i][j]; 
         
         //draw soil
-        //image(soils[areaIndex][4], i * SOIL_SIZE, j * SOIL_SIZE);
+        if(s >= 1 && s <= 3){image(soils[areaIndex][0],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 4 && s <= 6){image(soils[areaIndex][1],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 7 && s <= 9){image(soils[areaIndex][2],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 10 && s <= 12){image(soils[areaIndex][3],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 13 && s <= 45){image(soils[areaIndex][4],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else {image(soilEmpty, i * SOIL_SIZE, j * SOIL_SIZE);}   
         
-        for(int a = 0; a < SOIL_AREAS; a++){//'a' stands for "area"
-          for(int s = 1; s < (SOIL_HEALTH_MAX+1); s++){//'s' stands for "situation"
-            if(s >= 1 && s <= 3){image(soils[a][0],i * SOIL_SIZE, j * SOIL_SIZE);}
-            if(s >= 4 && s <= 6){image(soils[a][1],i * SOIL_SIZE, j * SOIL_SIZE);}
-            if(s >= 7 && s <= 9){image(soils[a][2],i * SOIL_SIZE, j * SOIL_SIZE);}
-            if(s >= 10 && s <= 12){image(soils[a][3],i * SOIL_SIZE, j * SOIL_SIZE);}
-            if(s >= 13 && s <= 45){image(soils[a][4],i * SOIL_SIZE, j * SOIL_SIZE);}
-          }        
-        }
-
-         
-        //draw stone
-        if(soilHealth[i][j] == 30 || soilHealth[i][j] == 45){
-          image(stones[0][4], i * SOIL_SIZE, j * SOIL_SIZE);
-        }
-        if(soilHealth[i][j] == 45){
-          image(stones[1][4], i * SOIL_SIZE, j * SOIL_SIZE);
-        }
-         
-        //draw soilEmpty
-        if (soilHealth[i][j] == 0){
-          image(soilEmpty, i * SOIL_SIZE, j * SOIL_SIZE);
-        }
+        //draw stone 0
+        if(s >= 16 && s <= 18){image(stones[0][0],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 19 && s <= 21){image(stones[0][1],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 22 && s <= 24){image(stones[0][2],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 25 && s <= 27){image(stones[0][3],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 28 && s <= 45){image(stones[0][4],i * SOIL_SIZE, j * SOIL_SIZE);}
+        
+        //draw stone 1
+        if(s >= 31 && s <= 33){image(stones[1][0],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 34 && s <= 36){image(stones[1][1],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 37 && s <= 39){image(stones[1][2],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 40 && s <= 42){image(stones[1][3],i * SOIL_SIZE, j * SOIL_SIZE);}
+        else if(s >= 43 && s <= 45){image(stones[1][4],i * SOIL_SIZE, j * SOIL_SIZE);}
        		
 			}
 		}
@@ -305,18 +297,18 @@ void draw() {
 
 		// Groundhog
 		PImage groundhogDisplay = groundhogIdle;
-
+    
 		// If player is not moving, we have to decide what player has to do next
 		if(playerMoveTimer == 0){
 
       //empty soil detection
-      if(playerRow != SOIL_ROW_COUNT && soilHealth[playerCol][playerRow + 1] == 0){       
+      if((playerRow+1) != SOIL_ROW_COUNT && soilHealth[playerCol][playerRow + 1] <= 0){       
           //force moving down by setting playerMoveDirection and playerMoveTimer 
           playerMoveDirection = DOWN;
           playerMoveTimer = playerMoveDuration;      
       }
 
-			// > Else then determine player's action based on input state
+			// Else then determine player's action based on input state
 			if(leftState){
 
 				groundhogDisplay = groundhogLeft;
@@ -324,9 +316,10 @@ void draw() {
 				// Check left boundary
 				if(playerCol > 0){
           //Check if "player is NOT above the ground AND there's soil on the left"
-          if(playerRow >= 0 && soilHealth[playerCol - 1][playerRow] != 0){
+          if(playerRow >= 0 && soilHealth[playerCol - 1][playerRow] >= 0){
             //dig(decrease soilHealth)
             soilHealth[playerCol-1][playerRow]--;
+            min(soilHealth[playerCol-1][playerRow], 0);
           }else{
             //if the dig is done then keep moving left
             playerMoveDirection = LEFT;
@@ -342,9 +335,10 @@ void draw() {
 				if(playerCol < SOIL_COL_COUNT - 1){
   
           //Check if "player is NOT above the ground AND there's soil on the right"
-					if(playerRow >= 0 && soilHealth[playerCol + 1][playerRow] != 0){
+					if(playerRow >= 0 && soilHealth[playerCol + 1][playerRow] >= 0){
             //dig(decrease soilHealth)
             soilHealth[playerCol + 1][playerRow] --;
+            min(soilHealth[playerCol + 1][playerRow], 0);
             
           }else{
             //if the dig is done then keep moving left
@@ -367,6 +361,7 @@ void draw() {
           if(playerRow != SOIL_ROW_COUNT){
             //dig(decrease soilHealth)
             soilHealth[playerCol][playerRow + 1]--;
+            min(soilHealth[playerCol][playerRow  + 1], 0);
           }
 
 					/* Note that player never needs to move down as it will always fall automatically,
@@ -380,8 +375,6 @@ void draw() {
 
 		// If player is now moving?
 		// (Separated if-else so player can actually move as soon as an action starts)
-		// (I don't think you have to change any of these)
-
 		if(playerMoveTimer > 0){
 
 			playerMoveTimer --;
@@ -422,9 +415,7 @@ void draw() {
 
 		image(groundhogDisplay, playerX, playerY);
 
-		// Soldiers
-		// > Remember to stop player's moving! (reset playerMoveTimer)
-		
+		// Soldiers	
     for(int i = 0; i < SOIL_AREAS; i++){ 
       //movement
       soldierX[i] += soldierSpeed[i]; 
@@ -441,7 +432,9 @@ void draw() {
          && playerY + groundhogIdle.width > soldierY[i]){
            playerHealth--;
            playerX = PLAYER_INIT_X;
-           playerY = PLAYER_INIT_Y;           
+           playerY = PLAYER_INIT_Y; 
+           
+           // stop player's moving (reset playerMoveTimer)  
            playerMoveTimer = 0;
            
            // reset the soil under player's original position
