@@ -262,13 +262,14 @@ void draw() {
         else if(s >= 25 && s <= 27){image(stones[0][3],i * SOIL_SIZE, j * SOIL_SIZE);}
         else if(s >= 28 && s <= 45){image(stones[0][4],i * SOIL_SIZE, j * SOIL_SIZE);}
         
+       
         //draw stone 1
         if(s >= 31 && s <= 33){image(stones[1][0],i * SOIL_SIZE, j * SOIL_SIZE);}
         else if(s >= 34 && s <= 36){image(stones[1][1],i * SOIL_SIZE, j * SOIL_SIZE);}
         else if(s >= 37 && s <= 39){image(stones[1][2],i * SOIL_SIZE, j * SOIL_SIZE);}
         else if(s >= 40 && s <= 42){image(stones[1][3],i * SOIL_SIZE, j * SOIL_SIZE);}
         else if(s >= 43 && s <= 45){image(stones[1][4],i * SOIL_SIZE, j * SOIL_SIZE);}
-       		
+       	
 			}
 		}
         
@@ -316,10 +317,10 @@ void draw() {
 				// Check left boundary
 				if(playerCol > 0){
           //Check if "player is NOT above the ground AND there's soil on the left"
-          if(playerRow >= 0 && soilHealth[playerCol - 1][playerRow] >= 0){
+          if(playerRow >= 0 && soilHealth[playerCol - 1][playerRow] > 0){
             //dig(decrease soilHealth)
+            constrain(soilHealth[playerCol-1][playerRow], 0, 45);
             soilHealth[playerCol-1][playerRow]--;
-            min(soilHealth[playerCol-1][playerRow], 0);
           }else{
             //if the dig is done then keep moving left
             playerMoveDirection = LEFT;
@@ -335,10 +336,10 @@ void draw() {
 				if(playerCol < SOIL_COL_COUNT - 1){
   
           //Check if "player is NOT above the ground AND there's soil on the right"
-					if(playerRow >= 0 && soilHealth[playerCol + 1][playerRow] >= 0){
+					if(playerRow >= 0 && soilHealth[playerCol + 1][playerRow] > 0){
             //dig(decrease soilHealth)
+            constrain(soilHealth[playerCol + 1][playerRow], 0, 45);
             soilHealth[playerCol + 1][playerRow] --;
-            min(soilHealth[playerCol + 1][playerRow], 0);
             
           }else{
             //if the dig is done then keep moving left
@@ -360,8 +361,8 @@ void draw() {
         */
           if(playerRow != SOIL_ROW_COUNT){
             //dig(decrease soilHealth)
-            soilHealth[playerCol][playerRow + 1]--;
-            min(soilHealth[playerCol][playerRow  + 1], 0);
+            constrain(soilHealth[playerCol][playerRow  + 1], 0, 45);
+            soilHealth[playerCol][playerRow + 1]--;            
           }
 
 					/* Note that player never needs to move down as it will always fall automatically,
